@@ -26,6 +26,10 @@ public class KafkaProducer {
             for (Map.Entry<String, String> entry : headers.entrySet()) {
                 record.headers().add(entry.getKey(), entry.getValue().getBytes());
             }
+//            kafkaTemplate.send(topic, record).addCallback(
+//                    success -> log.info("Message sent successfully"),
+//                    failure -> log.error("Message failed: " + failure.getMessage())
+//            );
             kafkaTemplate.send(record);
             System.out.println("Message sent to Kafka topic: " + topic);
         } catch (Exception e) {

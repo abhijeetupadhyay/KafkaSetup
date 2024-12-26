@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.header.Header;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -16,7 +18,8 @@ public class KafkaConsumer {
         this.objectMapper = objectMapper;
     }
 
-    @KafkaListener(topics = "example-topic", groupId = "my-consumer-group")
+    @Retryable(maxAttempts = 3, backoff = @Backoff(delay = 2000))
+    @KafkaListener(topics = "example-topic", groupId = "my-consumer-group", concurrency = "3")
     public void listen(ConsumerRecord<String, String> record) {
         Iterable<Header> headers = record.headers();
         for (Header header : headers) {

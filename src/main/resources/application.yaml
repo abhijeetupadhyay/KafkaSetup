@@ -1,0 +1,13 @@
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092  # Kafka Broker Address
+    producer:
+      acks: all  # Ensure producer acknowledgment from all replicas
+      retries: 3  # Number of retries for failed messages
+      max-in-flight-requests-per-connection: 5  # Max requests in-flight before waiting for response
+    consumer:
+      group-id: my-consumer-group  # Consumer group ID
+      auto-offset-reset: earliest  # Consume from the beginning if no offset exists
+      enable-auto-commit: false  # Disable auto commit for better offset control
+      max-poll-records: 100  # Max number of records per poll request
+      fetch-min-size: 1  # Minimum size of data that the consumer will fetch
